@@ -1,0 +1,28 @@
+<!-- Modal -->
+<div class="modal fade" id="detailpsikolog{{row[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Detail User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h2>ID Psikolog : {{ row[0] }}</h2>
+          <hr>
+          <pre>
+Nama Lengkap	: {{ row [1] }}
+SIPP	        : {{ row [2] }}
+Spesialisasi    : {{ row [3] }}
+Pengalaman    	: {{ row [4] }}
+Alamat   	: {{ row [5] }}
+Kontak  	: {{ row [6] }}
+CV   	        : <a href="{{ row[7] }}" target="_blank">Link Google Drive</a>
+Status   	: {{ row [8] }}
+        </pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

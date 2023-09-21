@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Form Kenali Diri </title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="../static/home/vendors/feather/feather.css">
+  <link rel="stylesheet" href="../static/home/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../static/home/vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="../static/home/vendors/typicons/typicons.css">
+  <link rel="stylesheet" href="../static/home/vendors/simple-line-icons/css/simple-line-icons.css">
+  <link rel="stylesheet" href="../static/home/vendors/css/vendor.bundle.base.css">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="../static/home/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+  <link rel="stylesheet" href="../static/home/js/select.dataTables.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="../static/home/css/vertical-layout-light/style.css">
+
+  <style>
+  /* Untuk mengatur wrapper */
+  .theme-setting-wrapper {
+    position: relative;
+  }
+
+  /* Untuk mengatur logo settings */
+  #settings-trigger {
+    position: fixed;
+    bottom: 100px; /* Atur jarak dari bawah sesuai kebutuhan */
+    right: 20px; /* Atur jarak dari kanan sesuai kebutuhan */
+    z-index: 9999; /* Pastikan z-index lebih tinggi daripada logo chat */
+  }
+
+  </style>
+
+  <!-- endinject -->
+  <link rel="shortcut icon" href="../../images/favicon.png" />
+  <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:../../partials/_navbar.html -->
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+        <div class="me-3">
+          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+            <span class="icon-menu"></span>
+          </button>
+        </div>
+        <div>
+          <a href="../../main.html">
+            <a>Menu</a>
+          </a>
+        </div>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-top"> 
+        <ul class="navbar-nav">
+          <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
+            <h1 class="welcome-text">Selamat Datang di REMEDY! <span class="text-black fw-bold">{{ session.name }}</span></h1>
+            <h3 class="welcome-sub-text">Mari bangkit dan berkembang bersama REMEDY!</h3>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+            <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+              <img class="img-xs rounded-circle" src="../static/home/images/profile_icon.png" alt="Profile image"> </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+              <div class="dropdown-header text-center">
+                <img class="img-md rounded-circle" src="../static/home/images/profile_icon.png" alt="Profile image">
+                <p class="mb-1 mt-3 font-weight-semibold">{{ session.username }}</p>
+                <p class="fw-light text-muted mb-0">{{ session.email }}</p>
+              </div>
+			  <a class="dropdown-item" href="{{url_for('logout')}}"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+          <span class="mdi mdi-menu"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:../../partials/_settings-panel.html -->
+      <div class="theme-setting-wrapper">
+        <div id="settings-trigger"><i class="ti-settings"></i></div>
+        <div id="theme-settings" class="settings-panel">
+          <i class="settings-close ti-close"></i>
+          <p class="settings-heading">Music</p>
+
+          <div style="position: relative; margin-left: 35px; margin-top:10px">
+            <button type="submit" class="btn btn-primary btn-rounded btn-fw" style="top: -40px;" onclick="window.open('/music', '_blank');">Mainkan Musik</button>
+          </div>
+
+		  <p class="settings-heading mt-2">Header Skins (Only for This Page)</p>
+          <div class="color-tiles mx-0 px-4">
+            <div class="tiles success"></div>
+            <div class="tiles warning"></div>
+            <div class="tiles danger"></div>
+            <div class="tiles info"></div>
+            <div class="tiles dark"></div>
+            <div class="tiles default"></div>
+          </div>
+
+		  <p class="settings-heading">Sidebar Skins (Only for This Page)</p>
+          <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border me-3"></div>Light</div>
+          <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border me-3"></div>Dark</div>
+
+		  
+        </div>
+      </div>
+	  
+      <div id="right-sidebar" class="settings-panel">
+        <i class="settings-close ti-close"></i>
+        <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="todo-tab" data-bs-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="chats-tab" data-bs-toggle="tab" href="#chats-section" role="tab" aria-controls="chats-section">CHATS</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="setting-content">
+          <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel" aria-labelledby="todo-section">
+            <div class="add-items d-flex px-3 mb-0">
+              <form class="form w-100">
+                <div class="form-group d-flex">
+                  <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
+                  <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task">Add</button>
+                </div>
+              </form>
+            </div>
+            <div class="list-wrapper px-3">
+              <ul class="d-flex flex-column-reverse todo-list">
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Team review meeting at 3.00 PM
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Prepare for presentation
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li>
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox">
+                      Resolve all the low priority tickets due today
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li class="completed">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox" checked>
+                      Schedule meeting for next week
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+                <li class="completed">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input class="checkbox" type="checkbox" checked>
+                      Project review
+                    </label>
+                  </div>
+                  <i class="remove ti-close"></i>
+                </li>
+              </ul>
+            </div>
+            <h4 class="px-3 text-muted mt-5 fw-light mb-0">Events</h4>
+            <div class="events pt-4 px-3">
+              <div class="wrapper d-flex mb-2">
+                <i class="ti-control-record text-primary me-2"></i>
+                <span>Feb 11 2018</span>
+              </div>
+              <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
+              <p class="text-gray mb-0">The total number of sessions</p>
+            </div>
+            <div class="events pt-4 px-3">
+              <div class="wrapper d-flex mb-2">
+                <i class="ti-control-record text-primary me-2"></i>
+                <span>Feb 7 2018</span>
+              </div>
+              <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
+              <p class="text-gray mb-0 ">Call Sarah Graves</p>
+            </div>
+          </div>
+          <!-- To do section tab ends -->
+          <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+            <div class="d-flex align-items-center justify-content-between border-bottom">
+              <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
+              <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 fw-normal">See All</small>
+            </div>
+            <ul class="chat-list">
+              <li class="list active">
+                <div class="profile"><img src="../../images/faces/face1.jpg" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Thomas Douglas</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">19 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="../../images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
+                <div class="info">
+                  <div class="wrapper d-flex">
+                    <p>Catherine</p>
+                  </div>
+                  <p>Away</p>
+                </div>
+                <div class="badge badge-success badge-pill my-auto mx-2">4</div>
+                <small class="text-muted my-auto">23 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="../../images/faces/face3.jpg" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Daniel Russell</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">14 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="../../images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
+                <div class="info">
+                  <p>James Richardson</p>
+                  <p>Away</p>
+                </div>
+                <small class="text-muted my-auto">2 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="../../images/faces/face5.jpg" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Madeline Kennedy</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">5 min</small>
+              </li>
+              <li class="list">
+                <div class="profile"><img src="../../images/faces/face6.jpg" alt="image"><span class="online"></span></div>
+                <div class="info">
+                  <p>Sarah Graves</p>
+                  <p>Available</p>
+                </div>
+                <small class="text-muted my-auto">47 min</small>
+              </li>
+            </ul>
+          </div>
+          <!-- chat tab ends -->
+        </div>
+      </div>
+      <!-- partial -->
+      <!-- partial:../../partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/main">
+              <i class="mdi mdi-grid-large menu-icon"></i>
+              <span class="menu-title">Home</span>
+            </a>
+          </li>
+          <li class="nav-item nav-category">Features</li>
+          {% if session['level'] != 'Admin' : %}
+		  <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="menu-icon mdi mdi-account"></i>
+              <span class="menu-title">Profil</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                {% if session['level'] == 'User' : %}
+				<li class="nav-item"><a class="nav-link" href="/main/profil_user">Profil User</a></li>
+                <li class="nav-item"><a class="nav-link" href="/main/user_journey">User Journey</a></li>
+                <li class="nav-item"><a class="nav-link" href="/main/user_feedback">User Feedback</a></li>
+                {% elif session['level'] == 'Fasilitator' : %}
+				<li class="nav-item"><a class="nav-link" href="/main/profil_fasilitator">Profil Fasilitator</a></li>
+                {% elif session['level'] == 'Psikolog' : %}
+				<li class="nav-item"><a class="nav-link" href="/main/profil_psikolog">Profil Psikolog</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </li>
+          {% endif %}
+          {% if session['level'] != 'Admin' : %}
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+              <i class="menu-icon mdi mdi-card-text-outline"></i>
+              <span class="menu-title">Formulir</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="form-elements">
+              <ul class="nav flex-column sub-menu">
+                {% if session['level'] == 'Psikolog' : %}
+				<li class="nav-item"><a class="nav-link" href="/main/form_datadiri_psikolog">Data Diri Psikolog</a></li>
+                {% elif session['level'] == 'Fasilitator' : %}
+				<li class="nav-item"><a class="nav-link" href="/main/form_datadiri_fasilitator">Data Diri Fasilitator</a></li>
+                {% elif session['level'] == 'User' : %}
+				<li class="nav-item"><a class="nav-link" href="/main/form_datadiri_user">Data Diri Pengguna</a></li>
+				<li class="nav-item"><a class="nav-link" href="/main/form_screening">Screening</a></li>
+				<li class="nav-item"><a class="nav-link" href="/main/form_kenalidiri">Kenali Diri</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </li>
+          {% endif %}
+          {% if session['level'] == 'User' : %}
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
+              <i class="menu-icon mdi mdi-chart-line"></i>
+              <span class="menu-title">Sehat Pikiran &<br>Interaksi Komunitas</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="charts">
+              <ul class="nav flex-column sub-menu">
+                {% if session['level'] == 'User' : %}
+                <li class="nav-item"><a class="nav-link" href="/main/terapi_journaling">Jurnal Harian</a></li>
+				<li class="nav-item"><a class="nav-link" href="/main/terapi_shambavimudra">Shambavi Mudra</a></li>
+				<li class="nav-item"><a class="nav-link" href="/main/terapi_mindfulness">Meditasi & <br>Mindfulness</br></a></li>
+				<li class="nav-item"><a class="nav-link" href="/main/terapi_doodling">Menggambar Doodle</a></li>
+				<li class="nav-item"><a class="nav-link" href="/main/terapi_mmr">Musik & Relaksasi<br> Otot</br></a></li>
+				<li class="nav-item"><a class="nav-link" href="/main/terapi_expwrite">Menulis Ekspresif</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/main/katalog">Katalog Psikolog</a></li>
+				<li class="nav-item"> <a class="nav-link" href="/main/komunitas">Interaksi Komunitas</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </li>
+          {% endif %}
+          {% if session['level'] == 'User' : %}
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
+              <i class="menu-icon mdi mdi-layers-outline"></i>
+              <span class="menu-title">Perjalananku</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="icons">
+              <ul class="nav flex-column sub-menu">
+                {% if session['level'] == 'User' : %}
+                <li class="nav-item"> <a class="nav-link" href="/main/pretest">Pre-Test</a></li>
+				<li class="nav-item"> <a class="nav-link" href="/main/posttest">Post-Test</a></li>
+				<li class="nav-item"> <a class="nav-link" href="/main/hasil">Summary Hasil</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </li>
+          {% endif %}
+          {% if session['level'] == 'User' : %}
+		  <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="menu-icon mdi mdi-ambulance"></i>
+              <span class="menu-title">Pemulihan</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                {% if session['level'] == 'User' : %}
+				<li class="nav-item"> <a class="nav-link" href="/main/pemulihan">Pemulihan</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </li>
+          {% endif %}
+          {% if session['level'] == 'Admin' : %}
+		  <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+              <i class="menu-icon mdi mdi-table"></i>
+              <span class="menu-title">CRUD</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="tables">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/main/crud_user">Tabel Pengguna</a></li>
+				<li class="nav-item"> <a class="nav-link" href="/main/crud_psikolog">Tabel Psikolog</a></li>
+				<li class="nav-item"> <a class="nav-link" href="/main/crud_fasilitator">Tabel Fasilitator</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
+              <i class="menu-icon mdi mdi-account-key"></i>
+              <span class="menu-title">Seleksi</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="icons">
+              <ul class="nav flex-column sub-menu">
+				<li class="nav-item"> <a class="nav-link" href="/main/seleksi_psikolog">Seleksi Psikolog</a></li>
+				<li class="nav-item"> <a class="nav-link" href="/main/seleksi_fasilitator">Seleksi Fasilitator</a></li>
+              </ul>
+            </div>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">        
+        <div class="content-wrapper">
+          <div class="row">
+            
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Kenali Diri (Deteksi PTSD)</h4>
+                  <p class="card-description">
+                    Silakan mengisi pertanyaan di bawah ini dengan benar dan sebagaimana mestinya!
+                  </p>
+				  <h5 class="card-title">Bagian 1</h5>
+                  <form class="forms-sample" action="{{ url_for('kenalidiri') }}" method="post">
+                   <div class="form-group">
+                    <label for="sesi">Apakah Anda pernah melakukan ini sebelumnya? (Jika belum, pilih Pre-Test) </label>
+                    <select class="form-control form-control-sm" id="sesi" name="sesi" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option>Pre-Test</option>
+					  <option>Post-Test</option>
+                    </select>
+                    </div>
+				  <div class="form-group">
+                      <label for="desk1">Tuliskan hal menakutkan atau menjengkelkan yang paling mengganggu ketika Anda memikirkannya.</label>
+                      <textarea class="form-control" id="desk1" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
+                   </div>
+                    <div class="form-group">
+                      <label for="desk2">Kapan hal itu terjadi?</label>
+                      <textarea class="form-control" id="desk2" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
+                   </div>
+				   <div class="form-group">
+                    <label for="kd1">Memiliki pikiran atau gambaran tentang hal tersebut dalam kepala ketika Anda tidak menginginkannya</label>
+                    <select class="form-control form-control-sm" id="kd1" name="kd1" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd2">Mengalami mimpi yang tidak menyenangkan atau mimpi buruk</label>
+                    <select class="form-control form-control-sm" id="kd2" name="kd2" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd3">Bertindak atau merasa seakan hal tersebut sedang terjadi lagi (melihat atau mendengar sesuatu dan merasa seakan Anda berada dalam situasi itu sekali lagi)</label>
+                    <select class="form-control form-control-sm" id="kd3" name="kd3" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd4">Merasa jengkel ketika Anda teringat akan apa yang terjadi (contohnya, merasa takut, marah, sedih, merasa bersalah, bingung)</label>
+                    <select class="form-control form-control-sm" id="kd4" name="kd4" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd5">Memiliki sensasi di dalam tubuh ketika Anda teringat akan apa yang terjadi (contohnya, berkeringat, jantung berdegup kencang, sakit perut atau sakit kepala)</label>
+                    <select class="form-control form-control-sm" id="kd5" name="kd5" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd6">Berusaha untuk tidak memikirkan atau memiliki perasaan tentang hal tersebut</label>
+                    <select class="form-control form-control-sm" id="kd6" name="kd6" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd7">Berusaha untuk menghindari apapun yang mengingatkan Anda tentang apa yang terjadi (contohnya, orang, tempat, atau pembicaraan tentang hal tersebut)</label>
+                    <select class="form-control form-control-sm" id="kd7" name="kd7" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd8">Tidak dapat mengingat bagian penting dari apa yang telah terjadi</label>
+                    <select class="form-control form-control-sm" id="kd8" name="kd8" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd9">Memiliki pikiran tidak menyenangkan tentang diri sendiri, orang lain, atau dunia (contohnya, “Saya tidak dapat melakukan apapun dengan benar”, “Semua orang jahat”, “Dunia adalah tempat yang menyeramkan”)</label>
+                    <select class="form-control form-control-sm" id="kd9" name="kd9" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd10">Berpikir bahwa apa yang terjadi adalah kesalahan Anda (contohnya, “Saya seharusnya tahu lebih baik”, “Saya seharusnya tidak melakukan itu”, “Saya pantas mengalaminya”)</label>
+                    <select class="form-control form-control-sm" id="kd10" name="kd10" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd11">Memiliki perasaan tidak menyenangkan yang kuat (seperti rasa takut, marah, perasaan bersalah, malu)</label>
+                    <select class="form-control form-control-sm" id="kd11" name="kd11" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd12">Minat menurun secara drastis dalam melakukan hal-hal yang biasanya dilakukan</label>
+                    <select class="form-control form-control-sm" id="kd12" name="kd12" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd13">Tidak merasa dekat dengan teman atau keluarga atau tidak ingin berada di sekitar mereka</label>
+                    <select class="form-control form-control-sm" id="kd13" name="kd13" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd14">Kesulitan memiliki perasaan menyenangkan (seperti kebahagiaan atau cinta) atau kesulitan memiliki perasaan apapun</label>
+                    <select class="form-control form-control-sm" id="kd14" name="kd14" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd15">Mudah merasa marah (contohnya berteriak, memukul orang lain, melempar benda)</label>
+                    <select class="form-control form-control-sm" id="kd15" name="kd15" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd16">Melakukan hal-hal yang dapat menyakiti diri sendiri (contohnya mengonsumsi narkoba, minuman beralkohol, kabur dari rumah, melukai tubuh)</label>
+                    <select class="form-control form-control-sm" id="kd16" name="kd16" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd17">Menjadi terlalu berhati-hati atau mewaspadai bahaya (contohnya memeriksa siapa atau apa yang ada di sekitar Anda)</label>
+                    <select class="form-control form-control-sm" id="kd17" name="kd17" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd18">Menjadi mudah terkejut atau mudah merasa takut (contohnya ketika seseorang berjalan mendatangi dari belakang, ketika mendengar suara keras)</label>
+                    <select class="form-control form-control-sm" id="kd18" name="kd18" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd19">Kesulitan menaruh perhatian (contohnya kehilangan alur cerita saat menonton televisi, melupakan apa yang sedang dibaca, tidak dapat memerhatikan pelajaran di kelas)</label>
+                    <select class="form-control form-control-sm" id="kd19" name="kd19" required minlength=1>
+                      <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+					
+					<div class="form-group">
+                    <label for="kd20">Kesulitan untuk tertidur atau tetap tidur</label>
+                    <select class="form-control form-control-sm" id="kd20" name="kd20" required minlength=1>
+					  <option hidden value="">Pilih Jawaban</option>
+					  <option value=0>Tidak Sama Sekali</option>
+					  <option value=1>Jarang (Sekali Seminggu)</option>
+                      <option value=2>Terkadang (3x Seminggu)</option>
+					  <option value=3>Sering (4-5x Seminggu)</option>
+					  <option value=4>Selalu</option>
+                    </select>
+                    </div>
+                    <button onclick="calculateTotal()" type="button" class="btn btn-primary me-2">Cek Status</button>
+                    <button class="btn btn-success">Submit</button>
+					<p>Total Skor : <span id="totalValue">0</span></p>
+
+					<!-- Warning box -->
+					  <div class="alert alert-success mt-4" id="pemulihanBox" style="display: none; color: black;">
+					    Selamat! Anda tidak terdeteksi PTSD, silakan lanjutkan ke tahapan pemulihan
+					  </div>
+					  
+                  </form>
+                </div>
+              </div>
+            </div>
+			
+			<!-- bagian 2 -->
+			
+			<div class="col-12 grid-margin stretch-card hidden" id="myDIV">
+              <div class="card">
+                <div class="card-body">
+				  <h5 class="card-title">Bagian 2</h5>
+				  <p class="card-description">
+                    Silakan mengisi pertanyaan di bawah ini dengan benar dan sebagaimana mestinya!
+                  </p>
+				  <p class="card-description">
+                    Apakah masalah-masalah di atas mengganggu aspek-aspek kehidupan Anda di bawah ini selama <strong>lebih dari satu bulan?</strong>
+                  </p>
+                  <form class="forms-sample">
+                    <div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Hal-hal menyenangkan yang ingin Anda lakukan</label>
+                          <div class="col-sm-4">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd1_2" id="kd1_2" value=1 required>
+                                Yes
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd1_2" id="kd1_2" value=0 required>
+                                No
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+						<div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Mengerjakan sesuatu yang menjadi tanggung jawab Anda</label>
+                          <div class="col-sm-4">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd2_2" id="kd2_2" value=1 required>
+                                Yes
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd2_2" id="kd2_2" value=0 required>
+                                No
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+						<div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Hubungan dengan teman-teman Anda</label>
+                          <div class="col-sm-4">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd3_2" id="kd3_2" value=1 required>
+                                Yes
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd3_2" id="kd3_2" value=0 required>
+                                No
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+						<div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Ibadah</label>
+                          <div class="col-sm-4">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd4_2" id="kd4_2" value=1 required>
+                                Yes
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd4_2" id="kd4_2" value=0 required>
+                                No
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+						<div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Tugas sekolah</label>
+                          <div class="col-sm-4">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd5_2" id="kd5_2" value=1 required>
+                                Yes
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd5_2" id="kd5_2" value=0 required>
+                                No
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+						<div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Hubungan dengan keluarga Anda</label>
+                          <div class="col-sm-4">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd6_2" id="kd6_2" value=1 required>
+                                Yes
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd6_2" id="kd6_2" value=0 required>
+                                No
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+						<div class="form-group row">
+                          <label class="col-sm-3 col-form-label">Merasa bahagia dengan hidup Anda</label>
+                          <div class="col-sm-4">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd7_2" id="kd7_2" value=1 required>
+                                Yes
+                              </label>
+                            </div>
+                          </div>
+                          <div class="col-sm-5">
+                            <div class="form-check">
+                              <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="kd7_2" id="kd7_2" value=0 required>
+                                No
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+					</form>
+					<button onclick="showMessage()" type="submit" class="btn btn-primary me-2">Submit</button>
+                    <button class="btn btn-light">Cancel</button>
+					
+					<!-- Warning box -->
+					  <div class="alert alert-warning mt-4" id="warningBox" style="display: none; color: black;">
+					    Anda terdeteksi PTSD, silakan lanjut ke tahapan Sehat Pikiran untuk mengatasi PTSD Anda!
+					  </div>
+					  
+					</div>
+					</div>
+					</div>
+					</div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Copyright © 2021. All rights reserved.</span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="../static/home/vendors/js/vendor.bundle.base.js"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <script src="../static/home/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+  <script src="../static/home/vendors/select2/select2.min.js"></script>
+  <script src="../static/home/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="../static/home/js/off-canvas.js"></script>
+  <script src="../static/home/js/hoverable-collapse.js"></script>
+  <script src="../static/home/js/template.js"></script>
+  <script src="../static/home/js/settings.js"></script>
+  <script src="../static/home/js/todolist.js"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="../static/home/js/file-upload.js"></script>
+  <script src="../static/home/js/typeahead.js"></script>
+  <script src="../static/home/js/select2.js"></script>
+  <!-- Calculate total -->
+  <script>
+  	function calculateTotal() {
+		  const dropdowns = document.querySelectorAll('select[name^="kd"]');
+		  let totalValue = 0;
+		
+		  dropdowns.forEach((dropdown) => {
+		    const selectedValue = parseInt(dropdown.value);
+		    totalValue += selectedValue;
+		  });
+		
+		  const totalValueElement = document.getElementById('totalValue');
+		  totalValueElement.textContent = totalValue;
+		  
+		  const warningBox = document.getElementById('pemulihanBox');
+		  warningBox.style.display = 'none';
+		
+		  if (totalValue <= 10 && totalValue >= 0) {
+		    // Non PTSD (0-10)
+		    warningBox.textContent = 'Anda tidak terdeteksi PTSD, silakan lanjutkan ke tahapan pemulihan';
+		    warningBox.style.backgroundColor = 'green';
+		    warningBox.style.display = 'block';
+			showDiv();
+		  } else if (totalValue >= 11 && totalValue <= 20) {
+		    // PTSD Ringan (11-20)
+		    warningBox.textContent = 'Anda terdeteksi PTSD Ringan, silakan lanjutkan ke tahapan terapi';
+		    warningBox.style.backgroundColor = 'yellow';
+		    warningBox.style.display = 'block';
+			showDiv();
+		  } else if (totalValue >= 21 && totalValue <= 40) {
+		    // PTSD Sedang (21-40)
+		    warningBox.textContent = 'Anda terdeteksi PTSD Sedang, silakan lanjutkan ke tahapan terapi';
+		    warningBox.style.backgroundColor = 'orange';
+		    warningBox.style.display = 'block';
+			showDiv();
+		  } else if (totalValue >= 41 && totalValue <= 80) {
+		    // PTSD Berat (41-80)
+		    warningBox.textContent = 'Anda terdeteksi PTSD Berat, silakan lanjutkan ke psikolog';
+		    warningBox.style.backgroundColor = 'red';
+		    warningBox.style.display = 'block';
+			showDiv();
+		  } else {
+		    // Pastikan Anda mengisi semua pertanyaan (<0)
+		    warningBox.textContent = 'Pastikan Anda telah mengisi semua pertanyaan.';
+		    warningBox.style.backgroundColor = 'orange';
+		    warningBox.style.display = 'block';
+		  }
+		  
+		}
+
+
+    </script>
+	
+	<!-- Show div for Bagian 2 -->
+	<script>
+	function showDiv() {
+	  var x = document.getElementById("myDIV");
+	  var y = document.getElementById("myDIV2");
+	  document.getElementById('myDIV').classList.remove('hidden');
+	  if (x.style.display === "none") {
+	    x.style.display = "block";
+		x.style.display = "table";
+	  } else {
+	    x.style.display = "block";
+	  }
+	  
+	  if (y.style.display === "none") {
+	    y.style.display = "block";
+		y.style.display = "table";
+	  } else {
+	    y.style.display = "block";
+	  }
+	  
+	}
+	</script>
+	
+	<!-- Show message for Bagian 2 -->
+	<script>
+	function showMessage() {
+		  // Kode untuk menghitung totalValue (sesuai dengan kode sebelumnya)
+		
+		  // Tambahkan kondisi untuk menampilkan warning box
+		  const warningBox = document.getElementById('warningBox');
+		  warningBox.style.display = 'block';
+		}
+
+	</script>
+	
+	<!-- End custom js for this page-->
+	
+	<!-- Play music -->
+  	<script>
+    const backgroundMusic = document.getElementById('backgroundMusic');
+	const onButton = document.getElementById('lagu_on');
+	const offButton = document.getElementById('lagu_off');
+	
+	onButton.classList.add('selected');
+	
+	onButton.addEventListener('click', function () {
+	  backgroundMusic.play();
+	  onButton.classList.add('selected');
+	  offButton.classList.remove('selected');
+	});
+	
+	offButton.addEventListener('click', function () {
+	  backgroundMusic.pause();
+	  onButton.classList.remove('selected');
+	  offButton.classList.add('selected');
+	});
+  	</script>
+
+	<script async data-id="9254557565" id="chatling-embed-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>
+
+</body>
+
+</html>

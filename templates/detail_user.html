@@ -1,0 +1,27 @@
+<!-- Modal -->
+<div class="modal fade" id="detailuser{{row[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Detail User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h2>ID User : {{ row[0] }}</h2>
+          <hr>
+          <pre>
+Nama Lengkap	: {{ row [1] }}
+Jenis Kelamin	: {{ row [2] }}
+Usia          	: {{ row [3] }}
+Alamat    	: {{ row [4] }}
+Pendidikan   	: {{ row [5] }}
+Instansi  	: {{ row [6] }}
+Nomor HP   	: {{ row [7] }}
+        </pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

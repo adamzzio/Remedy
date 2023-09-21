@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div class="modal fade" id="detail_desk_psikolog{{row[0]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Detail User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h2>Nama Psikolog : </h2>
+          <h3>{{ row[0] }}</h3>
+          <hr>
+          <pre>
+Deskripsi Rating :
+{% for deskripsi in data_eval_psikolog %}
+- {{ deskripsi[3] }}
+<hr>
+{% endfor %}
+        </pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

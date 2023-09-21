@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Registration Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="../static/home/css/logreg-style.css">
+
+	</head>
+	<body>
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+            <div class="col-md-4 text-center mt-3 mb-3">
+                <!-- pesan flash -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <!-- alert -->
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+					<h2 class="heading-section">Registration Page</h2>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-12 col-lg-10">
+					<div class="wrap d-md-flex">
+						<div class="img" style="background-image: url(../static/home/images/logo_remedy_login.jpg);">
+			      </div>
+						<div class="login-wrap p-4 p-md-5">
+			      	<div class="d-flex">
+			      		<div class="w-100">
+			      			<h3 class="mb-4">Sign Up</h3>
+			      		</div>
+						<div class="form-group">
+		            	<button type="submit" class="form-control btn btn-primary rounded submit px-3" onclick="window.location.href='/';">Home</button>
+		            </div>
+			      	</div>
+                      <form action="{{ url_for('register') }}" method="post" class="signin-form">
+						<div class="form-group mb-3">
+			      			<label class="label" for="name">Nama Lengkap</label>
+			      			<input type="text" class="form-control" placeholder="Nama Lengkap" name="name" required>
+			      		</div>
+			      		<div class="form-group mb-3">
+			      			<label class="label" for="username">Username</label>
+			      			<input type="text" class="form-control" placeholder="Username" name="username" required>
+			      		</div>
+                        <div class="form-group mb-3">
+			      			<label class="label" for="email">Email</label>
+			      			<input type="text" class="form-control" placeholder="Email" name="email" required>
+			      		</div>
+		            <div class="form-group mb-3">
+		            	<label class="label" for="password">Password</label>
+		              <input type="password" class="form-control" placeholder="Password" name="password" required>
+		            </div>
+					<div class="form-group mb-3">
+		            	<label class="label" for="level">Status</label>
+		              <select class="form-control" id="level" name="level" required minlength="3">
+						<option hidden value="">Pilih Status Anda</option>
+						<option value="User">1 : Pengguna / Pasien</option>
+						<option value="Psikolog">2 : Psikolog</option>
+						<option value="Fasilitator">3 : Fasilitator</option>
+						<option value="Admin">4 : Admin</option>
+					  </select>
+		            </div>
+		            <div class="form-group">
+		            	<button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign In</button>
+		            </div>
+		          </form>
+		          <p class="text-center">Sudah punya akun? <a data-toggle="tab" href="/login">Login Di Sini!</a></p>
+		        </div>
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+  <script src="..static/home/js/logreg-jquery.min.js"></script>
+  <script src="..static/home/js/logreg-popper.js"></script>
+  <script src="..static/home/js/logreg-bootstrap.min.js"></script>
+  <script src="..static/home/js/logreg-main.js"></script>
+
+	</body>
+</html>
+

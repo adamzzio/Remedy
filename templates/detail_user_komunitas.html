@@ -1,0 +1,24 @@
+<!-- Modal -->
+<div class="modal fade" id="detailuserkomunitas{{row[2]}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Detail User Komunitas</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h2>Nama Grup : {{ row[2] }}</h2>
+          <hr>
+          <pre>
+Anggota Grup :
+{% for nama in data_peserta %}
+- {{ nama[1] }}
+{% endfor %}
+        </pre>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
