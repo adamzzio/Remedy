@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Post-Test </title>
+  <link rel="icon" href="../static/home/images/REMEDY.ico">
   <!-- plugins:css -->
   <link rel="stylesheet" href="../static/home/vendors/feather/feather.css">
   <link rel="stylesheet" href="../static/home/vendors/mdi/css/materialdesignicons.min.css">
@@ -35,6 +36,12 @@
     z-index: 9999; /* Pastikan z-index lebih tinggi daripada logo chat */
   }
 
+  </style>
+
+  <style>
+  #final, #interim, #status {
+    color: black !important;
+    }
   </style>
 
   <!-- endinject -->
@@ -452,29 +459,56 @@
             </div>
             <div class="col-12 grid-margin stretch-card">
               <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Soal Post-Test</h4>
-                  <p class="card-description">
-                    Silakan mengisi pertanyaan-pertanyaan di bawah ini!
-                  </p>
-                  <form class="forms-sample" action="{{ url_for('insert_posttest') }}" method="post">
-					<div class="form-group">
-                      <label for="post1" style="text-align:justify;">Beberapa minggu terakhir, Anda belajar untuk merelaksasikan tubuh dan pikiran, serta menghadapi trauma Anda. Bagaimana pikiran yang lebih baik untuk menggantikan pikiran pada pertanyaan ke-2? (Contohnya “Aku berharga dan berguna”, “Hidup ini penuh berkah dan kesempatan”, “Apa yang terjadi bukan karena kesalahanku, aku pantas membela diriku sendiri”, “Aku bisa memaafkan mereka yang menyakitiku dan bangkit”, dan lain-lain)</label>
-                      <textarea class="form-control" name="post1" id="post1" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
+                  <div class="card-body">
+                      <h4 class="card-title">Post-Test</h4>
+                      <p class="card-description">
+                          Silakan jawab pertanyaan-pertanyaan di bawah ini dengan <strong>urut</strong> ceritakan segala macam permasalahan Anda hingga Anda merasa lega!
+                      </p>
+
+                      <form id="speechForm" action="{{ url_for('posttest') }}" method="post">
+                      <div class="form-group">
+                        <label for="post_question">Pertanyaan</label>
+                        <select class="form-control form-control-sm" id="post_question" name="post_question" required minlength=1>
+                          <option hidden value="">Pilih Sesi Anda</option>
+                          {% if post_q1 == 'Kosong' and post_q2 == 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          {% elif post_q1 != 'Kosong' and post_q2 == 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          <option>Pertanyaan 2</option>
+                          {% elif post_q1 != 'Kosong' and post_q2 != 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          <option>Pertanyaan 2</option>
+                          <option>Pertanyaan 3</option>
+                          {% endif %}
+                        </select>
+                        </div>
+                      <div style="display: flex; text-align:justify;" id="dynamicContent_posttest">
+                      </div>
+                      <div class="form-group">
+                        <label for="post_answer"></label>
+                        <input type="hidden" class="form-control" id="post_answer" name="post_answer" required minlength=1>
+                      </div>
+
+                      <!-- Tombol Submit -->
+                      <div class="mt-4">
+                          <button type="submit" class="btn btn-primary">Kirim Jawaban</button>
+                      </div>
+
+                      </form>
+
+                      <div class="mt-4" id="div_language">
+                        <div class="p-3" style="border: 1px solid black; height: 150px; border-radius: 8px;">
+                          <span id="final" class="text-light"></span>
+                          <span id="interim" class="text-secondary"></span>
+                        </div>
+                        <div class="mt-4">
+                          <button class="btn btn-success" id="start">Mulai</button>
+                          <button class="btn btn-danger" id="stop">Stop</button>
+                          <p id="status" class="lead mt-3 text-light" style="display: none">Sedang Merekam ...</p>
+                        </div>
+                      </div>
                     </div>
-					<div class="form-group">
-                      <label for="post2" style="text-align:justify;">Dengan pikiran yang baru itu, perilaku apa yang lebih baik ditunjukkan untuk menggantikan perilaku pada pertanyaan ke-4? (Contohnya berani menghentikan pelaku perundungan, mencari bantuan, menunjukkan jati diri dengan percaya diri)</label>
-                      <textarea class="form-control" name="post2" id="post2" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
-                    </div>
-					<div class="form-group">
-                      <label for="post3" style="text-align:justify;">Manfaat apa yang kamu peroleh dengan mempelajari dan melalui kegiatan-kegiatan ini?</label>
-                      <textarea class="form-control" name="post3" id="post3" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
                 </div>
-              </div>
             </div>
             {% endif %}
 
@@ -509,6 +543,8 @@
   <script src="../static/home/js/settings.js"></script>
   <script src="../static/home/js/todolist.js"></script>
   <!-- endinject -->
+  <script src="../static/home/js/speechRecognition_posttest.js"></script>
+  <script src="../static/home/js/language.js"></script>
   <!-- Custom js for this page-->
   <script src="../static/home/js/dashboard.js"></script>
   <script src="../static/home/js/Chart.roundedBarCharts.js"></script>
@@ -533,6 +569,25 @@
 	  onButton.classList.remove('selected');
 	  offButton.classList.add('selected');
 	});
+  </script>
+
+  <!-- Change content -->
+  <script>
+    // script.js
+      const contentSelector = document.getElementById('post_question');
+      const dynamicContent = document.getElementById('dynamicContent_posttest');
+
+      contentSelector.addEventListener('change', function() {
+          const selectedOption = contentSelector.value;
+
+          if (selectedOption === 'Pertanyaan 1') {
+              dynamicContent.innerHTML = '<p class="card-description">Beberapa minggu terakhir, Anda belajar untuk merelaksasikan tubuh dan pikiran, serta menghadapi trauma Anda. Bagaimana pikiran yang lebih baik untuk menggantikan pikiran pada pertanyaan ke-2? (Contohnya “Aku berharga dan berguna”, “Hidup ini penuh berkah dan kesempatan”, “Apa yang terjadi bukan karena kesalahanku, aku pantas membela diriku sendiri”, “Aku bisa memaafkan mereka yang menyakitiku dan bangkit”, dan lain-lain)</p>';
+          } else if (selectedOption === 'Pertanyaan 2') {
+              dynamicContent.innerHTML = '<p class="card-description">Dengan pikiran yang baru itu, perilaku apa yang lebih baik ditunjukkan untuk menggantikan perilaku pada pertanyaan ke-4? (Contohnya berani menghentikan pelaku perundungan, mencari bantuan, menunjukkan jati diri dengan percaya diri)</p>';
+          } else if (selectedOption === 'Pertanyaan 3') {
+              dynamicContent.innerHTML = '<p class="card-description">Manfaat apa yang kamu peroleh dengan mempelajari dan melalui kegiatan-kegiatan ini?</p>';
+          }
+      });
   </script>
 
   <script async data-id="9254557565" id="chatling-embed-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>

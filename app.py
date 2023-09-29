@@ -411,10 +411,20 @@ def pretest():
     if (('loggedin' in session) & (session['level'] == 'User')):
         id = session['id']
         cur = mysql.connection.cursor()
+        cur.execute("SELECT pre_q1, pre_q2, pre_q3, pre_q4, pre_q5 FROM data_hasil WHERE id_hasil = %s", (id,))
+        data_jawab_pretest = cur.fetchone()
+        cur.execute("SELECT post_q1, post_q2 FROM data_hasil WHERE id_hasil = %s", (id,))
+        data_jawab_posttest = cur.fetchone()
+        post_q1 = data_jawab_posttest[0]  # Menyimpan post_q1 pada variabel post_q1
+        post_q2 = data_jawab_posttest[1]
+        id = session['id']
+        cur = mysql.connection.cursor()
         cur.execute("SELECT status FROM data_hasil WHERE id_hasil = %s", (id,))
         data_hasil = cur.fetchone()
         cur.close()
-        return render_template('pretest.html', data_hasil=data_hasil)
+
+        return render_template('pretest.html', data_jawab_pretest = data_jawab_pretest,
+                               data_hasil=data_hasil, post_q1=post_q1, post_q2=post_q2)
     flash('Harap Login dulu', 'danger')
     return redirect(url_for('login'))
 
@@ -426,14 +436,18 @@ def posttest():
         cur = mysql.connection.cursor()
         cur.execute("SELECT pre_q1, pre_q2, pre_q3, pre_q4, pre_q5 FROM data_hasil WHERE id_hasil = %s", (id,))
         data_jawab_pretest = cur.fetchone()
+        cur.execute("SELECT post_q1, post_q2 FROM data_hasil WHERE id_hasil = %s", (id,))
+        data_jawab_posttest = cur.fetchone()
+        post_q1 = data_jawab_posttest[0]  # Menyimpan post_q1 pada variabel post_q1
+        post_q2 = data_jawab_posttest[1]
         id = session['id']
         cur = mysql.connection.cursor()
         cur.execute("SELECT status FROM data_hasil WHERE id_hasil = %s", (id,))
         data_hasil = cur.fetchone()
         cur.close()
 
-        return render_template('posttest.html', data_jawab_pretest = data_jawab_pretest,
-                               data_hasil=data_hasil)
+        return render_template('posttest.html', data_jawab_pretest=data_jawab_pretest,
+                               data_hasil=data_hasil, post_q1=post_q1, post_q2=post_q2)
     flash('Harap Login dulu', 'danger')
     return redirect(url_for('login'))
 
@@ -1130,61 +1144,86 @@ def insert_pretest():
     if (('loggedin' in session) & (session['level'] == 'User')):
         if request.method == 'POST':
             id = session['id']
-            pre1 = request.form['pre1']
-            pre2 = request.form['pre2']
-            pre3 = request.form['pre3']
-            pre4 = request.form['pre4']
-            pre5 = request.form['pre5']
-
-            # Combine pre1-pre5
-            pre_answer = f"""
-            Cerita:
-            {pre1}
-
-            Pikiran:
-            {pre2}
-
-            Emosi:
-            {pre3}
-
-            Perilaku:
-            {pre4}
-
-            Respons:
-            {pre5}
-            """
-
-            df_result_pretest = pd.DataFrame({'Pre-Test': [pre_answer]})
-            # Casefolding
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].str.lower()
-            # Text Cleaning
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].astype(str).apply(lambda x: x.encode('latin-1', 'ignore').decode('latin-1'))
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_mention)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_hashtag)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_https)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_number)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_punc)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_whitespace)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_whitespace_multi)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_single_char)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(word_tokenize_wrapper)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(stemming)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_stopwords)
-            df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].agg(lambda x: ','.join(map(str, x)))
-            result_pretest = model_pretest.predict(tfidf_pretest.transform(df_result_pretest['Pre-Test'].values))
-            result_proba_pretest = model_pretest.predict_proba(tfidf_pretest.transform(df_result_pretest['Pre-Test'].values))
-
+            sesi = request.form['pre_question']
+            pre_answer = request.form['pre_answer']
             cur = mysql.connection.cursor()
 
-            # Lakukan operasi UPDATE pada data yang sudah ada
-            cur.execute("UPDATE data_hasil SET pre_q1=%s, pre_q2=%s, pre_q3=%s, pre_q4=%s, pre_q5=%s, pre_skor=%s WHERE id_hasil=%s",
-                        (pre1, pre2, pre3, pre4, pre5, int(result_pretest), id))
-            flash(
-                'Selamat karena telah menyelesaikan Pre-Test, untuk melanjutkan langkah Anda serta untuk memantau perjalanan Anda, silakan kunjungi menu User Journey',
-                'success')
+            cur.execute("SELECT pre_q1, pre_q2, pre_q3, pre_q4, pre_q5 FROM data_hasil WHERE id_hasil = %s", (id,))
+            data_jawab_pretest = cur.fetchone()
+            pre_q1 = data_jawab_pretest[0]  # Menyimpan post_q1 pada variabel pre_q1 dst
+            pre_q2 = data_jawab_pretest[1]
+            pre_q3 = data_jawab_pretest[2]
+            pre_q4 = data_jawab_pretest[3]
 
-            mysql.connection.commit()
-            return redirect(url_for('hasil'))
+            if sesi == 'Pertanyaan 1':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q1=%s WHERE id_hasil=%s",
+                            (pre_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('pretest'))
+
+            elif sesi == 'Pertanyaan 2':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q2=%s WHERE id_hasil=%s",
+                            (pre_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('pretest'))
+
+            elif sesi == 'Pertanyaan 3':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q3=%s WHERE id_hasil=%s",
+                            (pre_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('pretest'))
+
+            elif sesi == 'Pertanyaan 4':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q4=%s WHERE id_hasil=%s",
+                            (pre_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('pretest'))
+
+            elif sesi == 'Pertanyaan 5':
+                pre_answer_full = f"""
+                Pikiran:
+                {pre_q1}
+                Perilaku:
+                {pre_q2}
+                Pikiran:
+                {pre_q3}
+                Perilaku:
+                {pre_q4}
+                Manfaat:
+                {pre_answer}
+                """
+
+                df_result_pretest = pd.DataFrame({'Pre-Test': [pre_answer_full]})
+                # Casefolding
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].str.lower()
+                # Text Cleaning
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].astype(str).apply(lambda x: x.encode('latin-1', 'ignore').decode('latin-1'))
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_mention)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_hashtag)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_https)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_number)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_punc)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_whitespace)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_whitespace_multi)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_single_char)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(word_tokenize_wrapper)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(stemming)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_stopwords)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].agg(lambda x: ','.join(map(str, x)))
+                result_pretest = model_pretest.predict(tfidf_pretest.transform(df_result_pretest['Pre-Test'].values))
+                result_proba_pretest = model_pretest.predict_proba(tfidf_pretest.transform(df_result_pretest['Pre-Test'].values))
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q5=%s, pre_skor=%s WHERE id_hasil=%s",
+                            (pre_answer, int(result_pretest), id))
+                mysql.connection.commit()
+                return redirect(url_for('hasil'))
+
+            else:
+                flash('Pastikan memilih pertanyaan terlebih dahulu', 'danger')
 
     flash('Harap Login dulu', 'danger')
     return redirect(url_for('login'))
@@ -1195,49 +1234,69 @@ def insert_posttest():
     if (('loggedin' in session) & (session['level'] == 'User')):
         if request.method == 'POST':
             id = session['id']
-            post1 = request.form['post1']
-            post2 = request.form['post2']
-            post3 = request.form['post3']
-
-            post_answer = f"""
-            Pikiran:
-            {post1}
-
-            Perilaku:
-            {post2}
-
-            Manfaat:
-            {post3}
-            """
-
-            df_result_posttest = pd.DataFrame({'Post-Test': [post_answer]})
-            # Casefolding
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].str.lower()
-            # Text Cleaning
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].astype(str).apply(lambda x: x.encode('latin-1', 'ignore').decode('latin-1'))
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_mention)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_hashtag)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_https)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_number)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_punc)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_whitespace)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_whitespace_multi)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_single_char)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(word_tokenize_wrapper)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(stemming)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_stopwords)
-            df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].agg(lambda x: ','.join(map(str, x)))
-            result_posttest = model_posttest.predict(tfidf_posttest.transform(df_result_posttest['Post-Test'].values))
-            result_proba_posttest = model_posttest.predict_proba(tfidf_posttest.transform(df_result_posttest['Post-Test'].values))
-
+            sesi = request.form['post_question']
+            post_answer = request.form['post_answer']
             cur = mysql.connection.cursor()
 
-            # Lakukan operasi UPDATE pada data yang sudah ada
-            cur.execute("UPDATE data_hasil SET post_q1=%s, post_q2=%s, post_q3=%s, post_skor=%s WHERE id_hasil=%s",
-                        (post1, post2, post3, int(result_posttest), id))
+            cur.execute("SELECT post_q1, post_q2 FROM data_hasil WHERE id_hasil = %s", (id,))
+            data_jawab_posttest = cur.fetchone()
+            post_q1 = data_jawab_posttest[0]  # Menyimpan post_q1 pada variabel post_q1
+            post_q2 = data_jawab_posttest[1]
 
-            mysql.connection.commit()
-            return redirect(url_for('hasil'))
+            if sesi == 'Pertanyaan 1':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET post_q1=%s WHERE id_hasil=%s",
+                            (post_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('posttest'))
+
+            elif sesi == 'Pertanyaan 2':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET post_q2=%s WHERE id_hasil=%s",
+                            (post_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('posttest'))
+
+            elif sesi == 'Pertanyaan 3':
+                post_answer_full = f"""
+                Pikiran:
+                {post_q1}
+                Perilaku:
+                {post_q2}
+                Manfaat:
+                {post_answer}
+                """
+
+                df_result_posttest = pd.DataFrame({'Post-Test': [post_answer_full]})
+                # Casefolding
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].str.lower()
+                # Text Cleaning
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].astype(str).apply(
+                    lambda x: x.encode('latin-1', 'ignore').decode('latin-1'))
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_mention)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_hashtag)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_https)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_number)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_punc)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_whitespace)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_whitespace_multi)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_single_char)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(word_tokenize_wrapper)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(stemming)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].apply(remove_stopwords)
+                df_result_posttest['Post-Test'] = df_result_posttest['Post-Test'].agg(lambda x: ','.join(map(str, x)))
+                result_posttest = model_posttest.predict(
+                    tfidf_posttest.transform(df_result_posttest['Post-Test'].values))
+                result_proba_posttest = model_posttest.predict_proba(
+                    tfidf_posttest.transform(df_result_posttest['Post-Test'].values))
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET post_q3=%s, post_skor=%s WHERE id_hasil=%s",
+                            (post_answer, int(result_posttest), id))
+                mysql.connection.commit()
+                return redirect(url_for('hasil'))
+
+            else:
+                flash('Pastikan memilih pertanyaan terlebih dahulu', 'danger')
 
     flash('Harap Login dulu', 'danger')
     return redirect(url_for('login'))
@@ -1820,6 +1879,119 @@ def evaluasi_web():
                                graphJSON_wordcloud=graphJSON_wordcloud)
 
     flash('Harap Login dulu','danger')
+    return redirect(url_for('login'))
+
+# ===== Set Main Page | Testing Web Speech ======
+@app.route('/main/testing_webspeech')
+def testing_webspeech():
+    if (('loggedin' in session) & (session['level'] == 'User')):
+        id = session['id']
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT pre_q1, pre_q2, pre_q3, pre_q4, pre_q5 FROM data_hasil WHERE id_hasil = %s", (id,))
+        data_jawab_pretest = cur.fetchone()
+        cur.execute("SELECT post_q1, post_q2 FROM data_hasil WHERE id_hasil = %s", (id,))
+        data_jawab_posttest = cur.fetchone()
+        post_q1 = data_jawab_posttest[0]  # Menyimpan post_q1 pada variabel post_q1
+        post_q2 = data_jawab_posttest[1]
+        id = session['id']
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT status FROM data_hasil WHERE id_hasil = %s", (id,))
+        data_hasil = cur.fetchone()
+        cur.close()
+
+        return render_template('testing_webspeech.html', data_jawab_pretest = data_jawab_pretest,
+                               data_hasil=data_hasil, post_q1=post_q1, post_q2=post_q2)
+    flash('Harap Login dulu', 'danger')
+    return redirect(url_for('login'))
+
+# ===== CRUD | Testing Insert & Show Web Speech =====
+@app.route('/main/testing_webspeech', methods=['POST'])
+def insert_webspeech():
+    if (('loggedin' in session) & (session['level'] == 'User')):
+        if request.method == 'POST':
+            id = session['id']
+            sesi = request.form['pre_question']
+            pre_answer = request.form['pre_answer']
+            cur = mysql.connection.cursor()
+
+            cur.execute("SELECT pre_q1, pre_q2, pre_q3, pre_q4, pre_q5 FROM data_hasil WHERE id_hasil = %s", (id,))
+            data_jawab_pretest = cur.fetchone()
+            pre_q1 = data_jawab_pretest[0]  # Menyimpan post_q1 pada variabel pre_q1 dst
+            pre_q2 = data_jawab_pretest[1]
+            pre_q3 = data_jawab_pretest[2]
+            pre_q4 = data_jawab_pretest[3]
+
+            if sesi == 'Pertanyaan 1':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q1=%s WHERE id_hasil=%s",
+                            (pre_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('testing_webspeech'))
+
+            elif sesi == 'Pertanyaan 2':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q2=%s WHERE id_hasil=%s",
+                            (pre_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('testing_webspeech'))
+
+            elif sesi == 'Pertanyaan 3':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q3=%s WHERE id_hasil=%s",
+                            (pre_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('testing_webspeech'))
+
+            elif sesi == 'Pertanyaan 4':
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q4=%s WHERE id_hasil=%s",
+                            (pre_answer, id))
+                mysql.connection.commit()
+                return redirect(url_for('testing_webspeech'))
+
+            elif sesi == 'Pertanyaan 5':
+                pre_answer_full = f"""
+                Pikiran:
+                {pre_q1}
+                Perilaku:
+                {pre_q2}
+                Pikiran:
+                {pre_q3}
+                Perilaku:
+                {pre_q4}
+                Manfaat:
+                {pre_answer}
+                """
+
+                df_result_pretest = pd.DataFrame({'Pre-Test': [pre_answer_full]})
+                # Casefolding
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].str.lower()
+                # Text Cleaning
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].astype(str).apply(lambda x: x.encode('latin-1', 'ignore').decode('latin-1'))
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_mention)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_hashtag)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_https)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_number)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_punc)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_whitespace)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_whitespace_multi)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_single_char)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(word_tokenize_wrapper)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(stemming)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].apply(remove_stopwords)
+                df_result_pretest['Pre-Test'] = df_result_pretest['Pre-Test'].agg(lambda x: ','.join(map(str, x)))
+                result_pretest = model_pretest.predict(tfidf_pretest.transform(df_result_pretest['Pre-Test'].values))
+                result_proba_pretest = model_pretest.predict_proba(tfidf_pretest.transform(df_result_pretest['Pre-Test'].values))
+                # Lakukan operasi UPDATE pada data yang sudah ada
+                cur.execute("UPDATE data_hasil SET pre_q5=%s, pre_skor=%s WHERE id_hasil=%s",
+                            (pre_answer, int(result_pretest), id))
+                mysql.connection.commit()
+                return redirect(url_for('hasil'))
+
+            else:
+                flash('Pastikan memilih pertanyaan terlebih dahulu', 'danger')
+
+    flash('Harap Login dulu', 'danger')
     return redirect(url_for('login'))
 
 if __name__ == '__main__':

@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Form Kenali Diri </title>
+  <link rel="icon" href="../static/home/images/REMEDY.ico">
   <!-- plugins:css -->
   <link rel="stylesheet" href="../static/home/vendors/feather/feather.css">
   <link rel="stylesheet" href="../static/home/vendors/mdi/css/materialdesignicons.min.css">
@@ -35,6 +36,12 @@
     z-index: 9999; /* Pastikan z-index lebih tinggi daripada logo chat */
   }
 
+  </style>
+
+  <style>
+  #final, #interim, #status {
+    color: black !important;
+    }
   </style>
 
   <!-- endinject -->
@@ -416,7 +423,28 @@
       <div class="main-panel">        
         <div class="content-wrapper">
           <div class="row">
-            
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Testing Web Speech</h4>
+                  <p class="card-description">
+                    Silakan ceritakan segala macam permasalahan Anda hingga Anda merasa lega!
+                  </p>
+                  <div class="mt-4" id="div_language">
+                    <h4 class="card-title">Transkrip</h4>
+                    <div class="p-3" style="border: 1px solid black; height: 150px; border-radius: 8px;">
+                      <span id="final" class="text-light"></span>
+                      <span id="interim" class="text-secondary"></span>
+                    </div>
+                    <div class="mt-4">
+                      <button class="btn btn-success" id="start">Mulai</button>
+                      <button class="btn btn-danger" id="stop">Stop</button>
+                      <p id="status" class="lead mt-3 text-light" style="display: none">Sedang Merekam ...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
@@ -876,14 +904,15 @@
   <script src="../static/home/vendors/typeahead.js/typeahead.bundle.min.js"></script>
   <script src="../static/home/vendors/select2/select2.min.js"></script>
   <script src="../static/home/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-  <!-- End plugin js for this page -->
   <!-- inject:js -->
   <script src="../static/home/js/off-canvas.js"></script>
   <script src="../static/home/js/hoverable-collapse.js"></script>
   <script src="../static/home/js/template.js"></script>
   <script src="../static/home/js/settings.js"></script>
   <script src="../static/home/js/todolist.js"></script>
-  <!-- endinject -->
+  <!-- Add script for web speech   -->
+  <script src="../static/home/js/speechRecognition.js"></script>
+  <script src="../static/home/js/language.js"></script>
   <!-- Custom js for this page-->
   <script src="../static/home/js/file-upload.js"></script>
   <script src="../static/home/js/typeahead.js"></script>

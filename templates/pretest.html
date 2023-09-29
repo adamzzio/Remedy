@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Pre-Test </title>
+  <link rel="icon" href="../static/home/images/REMEDY.ico">
   <!-- plugins:css -->
   <link rel="stylesheet" href="../static/home/vendors/feather/feather.css">
   <link rel="stylesheet" href="../static/home/vendors/mdi/css/materialdesignicons.min.css">
@@ -35,6 +36,12 @@
     z-index: 9999; /* Pastikan z-index lebih tinggi daripada logo chat */
   }
 
+  </style>
+
+  <style>
+    #final, #interim, #status {
+      color: black !important;
+      }
   </style>
 
   <!-- endinject -->
@@ -425,38 +432,74 @@
             {% elif data_hasil[0] == 'PTSD' or data_hasil[0] == 'Non-PTSD' %}
             <div class="col-12 grid-margin stretch-card">
               <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Soal Pre-Test</h4>
-                  <p class="card-description">
-                    Silakan mengisi pertanyaan-pertanyaan di bawah ini!
-                  </p>
-                  <form class="forms-sample" action="{{ url_for('insert_pretest') }}" method="post">
-                    <div class="form-group">
-                      <label for="pre1" style="text-align:justify;">Ceritakan perundungan yang menimbulkan trauma paling berat bagi Anda. Ceritakan juga dampaknya pada kehidupan Anda.</label>
-                      <textarea class="form-control" name="pre1" id="pre1" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
-                    </div>
-					<div class="form-group">
-                      <label for="pre2" style="text-align:justify;">Apa pikiran yang otomatis muncul ketika hal itu terjadi? Coba sebutkan 3. (Contohnya: “Aku payah dan tidak berguna”, “Hidup ini sia-sia”, “Ini semua terjadi karena kesalahanku”, “Mengapa mereka menyakitiku?” dan lain-lain)</label>
-                      <textarea class="form-control" name="pre2" id="pre2" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
-                    </div>
-					<div class="form-group">
-                      <label for="pre3" style="text-align:justify;">Setelah pikiran itu muncul, apa emosi yang Anda rasakan? (Contohnya marah, kecewa, takut, panik, cemas, sedih, senang, lega, dan lain-lain)</label>
-                      <textarea class="form-control" name="pre3" id="pre3" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
-                    </div>
-					<div class="form-group">
-                      <label for="pre4" style="text-align:justify;">Perilaku seperti apa yang Anda tunjukkan setelahnya? (Contohnya menjauh dari tempat perundungan, bersembunyi atau mengurung diri, membalas perbuatan pelaku perundungan, dan lain-lain)</label>
-                      <textarea class="form-control" name="pre4" id="pre4" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
-                    </div>
-                    <div class="form-group">
-                      <label for="pre5" style="text-align:justify;">Apakah perilaku dan usaha yang Anda lakukan membantu dalam mengatasi trauma akibat perundungan? YA atau TIDAK</label>
-                      <textarea class="form-control" name="pre5" id="pre5" rows="10" style=" min-width:500px; max-width:100%;min-height:100px;height:100%;width:100%;"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <button class="btn btn-light">Cancel</button>
-                  </form>
-                </div>
+                  <div class="card-body">
+                      <h4 class="card-title">Pre-Test</h4>
+                      <p class="card-description">
+                          Silakan jawab pertanyaan-pertanyaan di bawah ini dengan <strong>urut</strong> ceritakan segala macam permasalahan Anda hingga Anda merasa lega!
+                      </p>
+
+                      <form id="speechForm" action="{{ url_for('pretest') }}" method="post">
+                      <div class="form-group">
+                        <label for="pre_question">Pertanyaan</label>
+                        <select class="form-control form-control-sm" id="pre_question" name="pre_question" required minlength=1>
+                          <option hidden value="">Pilih Sesi Anda</option>
+                          {% if data_jawab_pretest[0] == 'Kosong' and data_jawab_pretest[1] == 'Kosong' and data_jawab_pretest[2] == 'Kosong' and data_jawab_pretest[3] == 'Kosong' and data_jawab_pretest[4] == 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          {% elif data_jawab_pretest[0] != 'Kosong' and data_jawab_pretest[1] == 'Kosong' and data_jawab_pretest[2] == 'Kosong' and data_jawab_pretest[3] == 'Kosong' and data_jawab_pretest[4] == 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          <option>Pertanyaan 2</option>
+                          {% elif data_jawab_pretest[0] != 'Kosong' and data_jawab_pretest[1] != 'Kosong' and data_jawab_pretest[2] == 'Kosong' and data_jawab_pretest[3] == 'Kosong' and data_jawab_pretest[4] == 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          <option>Pertanyaan 2</option>
+                          <option>Pertanyaan 3</option>
+                          {% elif data_jawab_pretest[0] != 'Kosong' and data_jawab_pretest[1] != 'Kosong' and data_jawab_pretest[2] != 'Kosong' and data_jawab_pretest[3] == 'Kosong' and data_jawab_pretest[4] == 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          <option>Pertanyaan 2</option>
+                          <option>Pertanyaan 3</option>
+                          <option>Pertanyaan 4</option>
+                          {% elif data_jawab_pretest[0] != 'Kosong' and data_jawab_pretest[1] != 'Kosong' and data_jawab_pretest[2] != 'Kosong' and data_jawab_pretest[3] != 'Kosong' and data_jawab_pretest[4] == 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          <option>Pertanyaan 2</option>
+                          <option>Pertanyaan 3</option>
+                          <option>Pertanyaan 4</option>
+                          <option>Pertanyaan 5</option>
+                          {% elif data_jawab_pretest[0] != 'Kosong' and data_jawab_pretest[1] != 'Kosong' and data_jawab_pretest[2] != 'Kosong' and data_jawab_pretest[3] != 'Kosong' and data_jawab_pretest[4] != 'Kosong' %}
+                          <option>Pertanyaan 1</option>
+                          <option>Pertanyaan 2</option>
+                          <option>Pertanyaan 3</option>
+                          <option>Pertanyaan 4</option>
+                          <option>Pertanyaan 5</option>
+                          {% endif %}
+                        </select>
+                        </div>
+                      <div style="display: flex; text-align:justify;" id="dynamicContent_pretest">
+                      </div>
+                      <div class="form-group">
+                        <label for="pre_answer"></label>
+                        <input type="hidden" class="form-control" id="pre_answer" name="pre_answer" required minlength=1>
+                      </div>
+
+                      <!-- Tombol Submit -->
+                      <div class="mt-4">
+                          <button type="submit" class="btn btn-primary">Kirim Jawaban</button>
+                      </div>
+
+                      </form>
+
+                      <div class="mt-4" id="div_language">
+                        <div class="p-3" style="border: 1px solid black; height: 150px; border-radius: 8px;">
+                          <span id="final" class="text-light"></span>
+                          <span id="interim" class="text-secondary"></span>
+                        </div>
+                        <div class="mt-4">
+                          <button class="btn btn-success" id="start">Mulai</button>
+                          <button class="btn btn-danger" id="stop">Stop</button>
+                          <p id="status" class="lead mt-3 text-light" style="display: none">Sedang Merekam ...</p>
+                        </div>
+                      </div>
+                     </div>
+                  </div>
               </div>
-            </div>
             {% endif %}
 
         <!-- content-wrapper ends -->
@@ -489,6 +532,9 @@
   <script src="../static/home/js/template.js"></script>
   <script src="../static/home/js/settings.js"></script>
   <script src="../static/home/js/todolist.js"></script>
+  <!-- Add script for web speech   -->
+  <script src="../static/home/js/speechRecognition.js"></script>
+  <script src="../static/home/js/language.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
   <script src="../static/home/js/dashboard.js"></script>
@@ -514,6 +560,29 @@
 	  onButton.classList.remove('selected');
 	  offButton.classList.add('selected');
 	});
+  </script>
+
+  <!-- Change content -->
+  <script>
+    // script.js
+      const contentSelector = document.getElementById('pre_question');
+      const dynamicContent = document.getElementById('dynamicContent_pretest');
+
+      contentSelector.addEventListener('change', function() {
+          const selectedOption = contentSelector.value;
+
+          if (selectedOption === 'Pertanyaan 1') {
+              dynamicContent.innerHTML = '<p class="card-description">Ceritakan perundungan yang menimbulkan trauma paling berat bagi Anda. Ceritakan juga dampaknya pada kehidupan Anda.</p>';
+          } else if (selectedOption === 'Pertanyaan 2') {
+              dynamicContent.innerHTML = '<p class="card-description">Apa pikiran yang otomatis muncul ketika hal itu terjadi? Coba sebutkan 3. (Contohnya: “Aku payah dan tidak berguna”, “Hidup ini sia-sia”, “Ini semua terjadi karena kesalahanku”, “Mengapa mereka menyakitiku?” dan lain-lain)</p>';
+          } else if (selectedOption === 'Pertanyaan 3') {
+              dynamicContent.innerHTML = '<p class="card-description">Setelah pikiran itu muncul, apa emosi yang Anda rasakan? (Contohnya marah, kecewa, takut, panik, cemas, sedih, senang, lega, dan lain-lain)</p>';
+          } else if (selectedOption === 'Pertanyaan 4') {
+              dynamicContent.innerHTML = '<p class="card-description">Perilaku seperti apa yang Anda tunjukkan setelahnya? (Contohnya menjauh dari tempat perundungan, bersembunyi atau mengurung diri, membalas perbuatan pelaku perundungan, dan lain-lain)</p>';
+          } else if (selectedOption === 'Pertanyaan 5') {
+              dynamicContent.innerHTML = '<p class="card-description">Apakah perilaku dan usaha yang Anda lakukan membantu dalam mengatasi trauma akibat perundungan? YA atau TIDAK</p>';
+          }
+      });
   </script>
 
   <script async data-id="9254557565" id="chatling-embed-script" type="text/javascript" src="https://chatling.ai/js/embed.js"></script>

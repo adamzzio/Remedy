@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title> Terapi | Expressive Writing  </title>
+  <link rel="icon" href="../static/home/images/REMEDY.ico">
   <!-- plugins:css -->
   <link rel="stylesheet" href="../static/home/vendors/feather/feather.css">
   <link rel="stylesheet" href="../static/home/vendors/mdi/css/materialdesignicons.min.css">
@@ -427,7 +428,7 @@
                 <div class="card-body">
                   <h4 class="card-title">Menulis Ekspresif</h4>
                   <p class="card-description">
-                    Silakan mengikuti instruksi pada video Visual Imagery di bawah ini
+                    Silakan mengikuti instruksi pada audio di bawah ini
                   </p>
 				  <form class="forms-sample" action="{{ url_for('expwrite') }}" method="post" id="expwrite">
                     <div class="form-group">
@@ -457,8 +458,6 @@
                     <p class="card-description" style="text-align:justify;">
                     Sebelum memulai, rilekskan tubuh Anda, cari posisi yang paling nyaman untuk Anda. Coba pejamkan mata, tarik napas dalam, kemudian hembuskan secara perlahan. Fokuslah pada pernapasan Anda. Rasakan tubuh Anda perlahan semakin rileks. Ketika Anda merasa sudah cukup tenang, bukalah mata Anda.
                     </p>
-                    <div style="display: flex; text-align:justify; " id="dynamicPcontent">
-                    </div>
 
 				  <p class="card-description">
                     &nbsp
@@ -495,7 +494,7 @@
                     <div style="display: flex; text-align:justify; " id="closingContent">
                     </div>
                     <div class="form-group" id="crosscheck">
-                      <label for="crosscheck_expwr">Berapakah hasil perhitungan dari 9 - 5?</label>
+                      <label for="crosscheck_expwr">Berapakah hasil perhitungan yang disebutkan dalam instruksi?</label>
                       <input type="text" class="form-control" id="crosscheck_expwr" name="crosscheck_expwr" placeholder="Pertanyaan ini bersifat validasi. Pastikan untuk emngisi pertanyaan ini dan SEMUA pertanyaan sebelumnya dengan benar!" required minlength=1 title="Harap masukkan hasil perhitungan yang benar.">
                     </div>
 					
@@ -582,18 +581,15 @@
           const selectedOption = contentSelector.value;
 
           if (selectedOption === 'Sesi 1') {
-              dynamicContent.innerHTML = '<h7 class="card-title">Expressive Writing 1</h7>';
-              dynamicPcontent.innerHTML = '<p class="card-description" style="text-align:justify;"> Hanya ketika Anda sudah siap, tuliskan seperti apa peristiwa perundungan yang menimbulkan trauma bagi Anda pada kolom pertama. Tuliskan seperti apa runtutan kejadiannya, siapa pelakunya, dan apa yang terjadi pada Anda. Mungkin berat bagi Anda untuk menceritakan apa yang terjadi di masa lalu. Apabila nantinya Anda merasa tidak nyaman karena harus mengingat hal-hal yang menyakitkan, tidak apa-apa untuk berhenti sejenak. Fokus pada pernapasan Anda dan rasakan tubuh Anda kembali rileks. Kemudian, silakan dilanjutkan apabila Anda tidak lagi merasa terganggu. </p>';
+              dynamicContent.innerHTML = '<div style="display: flex; justify-content: center;"><audio controls><source src="../static/home/audio/expwrite1.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>';
               q1_dynamiccontent.innerHTML = '<label for="q1_expwrite">Ceritakan pengalaman perundungan yang menimbulkan trauma bagi Anda dalam bentuk narasi</label><textarea class="form-control" name="q1_expwrite" id="q1_expwrite" rows="10" style=" min-width:500px; max width:100%;min-height:100px;height:100%;width:100%;"></textarea>';
               closingContent.innerHTML = '<p class="card-description" style="text-align:justify;"> Kerja bagus! Anda telah menyelesaikan kegiatan hari ini dengan baik. Untuk mengakhiri kegiatan ini, mari ucapkan kalimat ini untuk diri Anda sendiri: “Terima kasih aku telah berusaha membuka diri untuk menceritakan trauma ini. Aku yakin bisa menceritakan hal ini kembali tanpa merasa tertekan di masa mendatang.” Baik cukup sekian kegiatan kali ini. Sampai jumpa di lain hari bersama REMEDY.';
           } else if (selectedOption === 'Sesi 2') {
-              dynamicContent.innerHTML = '<h7 class="card-title">Expressive Writing 2</h7>';
-              dynamicPcontent.innerHTML = '<p class="card-description" style="text-align:justify;"> Hanya ketika Anda sudah siap, ingat-ingat kembali apa yang Anda tuliskan sebelumnya pada kegiatan Expressive Writing 1. Kemudian, pada kolom pertama tuliskan seperti apa pikiran dan perasaan Anda tentang peristiwa perundungan yang menimbulkan trauma itu. Tuliskan bagaimana pikiran Anda dalam merespons kejadian itu, dan emosi, serta perasaan seperti apa yang muncul. Mungkin berat bagi Anda untuk menceritakan apa yang terjadi di masa lalu. Apabila nantinya Anda merasa tidak nyaman karena harus mengingat hal-hal yang menyakitkan, tidak apa-apa untuk berhenti sejenak. Fokus pada pernapasan Anda dan rasakan tubuh Anda kembali rileks. Kemudian, silakan dilanjutkan apabila Anda tidak lagi merasa terganggu. </p>';
+              dynamicContent.innerHTML = '<div style="display: flex; justify-content: center;"><audio controls><source src="../static/home/audio/expwrite2.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>';
               q1_dynamiccontent.innerHTML = '<label for="q1_expwrite">Ceritakan pikiran dan perasaan Anda terkait pengalaman perundungan yang sebelumnya Anda tuliskan dalam bentuk narasi</label><textarea class="form-control" name="q1_expwrite" id="q1_expwrite" rows="10" style=" min-width:500px; max width:100%;min-height:100px;height:100%;width:100%;"></textarea>';
               closingContent.innerHTML = '<p class="card-description" style="text-align:justify;"> Kerja bagus! Anda telah menyelesaikan kegiatan hari ini dengan baik. Untuk mengakhiri kegiatan ini, mari ucapkan kalimat ini untuk diri Anda sendiri: “Terima kasih aku telah berusaha membuka diri untuk menceritakan pikiran dan perasaan terpendamku. Aku yakin bisa menceritakan hal ini kembali tanpa merasa tertekan di masa mendatang.” Baik cukup sekian kegiatan kali ini. Sampai jumpa di lain hari bersama REMEDY.';
           } else if (selectedOption === 'Sesi 3') {
-              dynamicContent.innerHTML = '<h7 class="card-title">Expressive Writing 3</h7>';
-              dynamicPcontent.innerHTML = '<p class="card-description" style="text-align:justify;"> Hanya ketika Anda sudah siap, ingat-ingat kembali apa yang Anda tuliskan sebelumnya pada kegiatan Expressive Writing 1 dan 2. Kemudian, pada kolom pertama Anda dapat menuliskan apapun, selama itu berkaitan dengan pengalaman perundungan yang menimbulkan trauma bagi Anda. Anda dibebaskan untuk menulis dalam topik atau tema apapun dan se-ekspresif mungkin terkait hal itu. Mungkin berat bagi Anda untuk menceritakan apa yang terjadi di masa lalu. Apabila nantinya Anda merasa tidak nyaman karena harus mengingat hal-hal yang menyakitkan, tidak apa-apa untuk berhenti sejenak. Fokus pada pernapasan Anda dan rasakan tubuh Anda kembali rileks. Kemudian, silakan dilanjutkan apabila Anda tidak lagi merasa terganggu. </p>';
+              dynamicContent.innerHTML = '<div style="display: flex; justify-content: center;"><audio controls><source src="../static/home/audio/expwrite3.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio>';
               q1_dynamiccontent.innerHTML = '<label for="q1_expwrite">Ceritakan suatu topik atau tema apapun terkait perundungan yang sebelumnya Anda tuliskan dalam bentuk narasi</label><textarea class="form-control" name="q1_expwrite" id="q1_expwrite" rows="10" style=" min-width:500px; max width:100%;min-height:100px;height:100%;width:100%;"></textarea>';
               closingContent.innerHTML = '<p class="card-description" style="text-align:justify;"> Kerja bagus! Anda telah menyelesaikan kegiatan hari ini dengan baik. Untuk mengakhiri kegiatan ini, mari ucapkan kalimat ini untuk diri Anda sendiri: “Terima kasih aku telah berusaha membuka diri untuk menghadapi masa laluku yang menyakitkan. Aku yakin bisa menceritakan hal ini kembali tanpa merasa tertekan di masa mendatang.” Baik cukup sekian kegiatan kali ini. Sampai jumpa di lain hari bersama REMEDY.';
           }
